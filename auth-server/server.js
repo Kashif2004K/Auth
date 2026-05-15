@@ -14,6 +14,26 @@ const users = [];
 // THE SECRET KEY (In a real app, this goes in your .env file)
 const SECRET_KEY = "my_super_secret_key_123";
 
+const verifyToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Get token from "Bearer <token>"
+
+    if (!token) return res.status(401).send("Access Denied: No Token Provided");
+
+    try {
+        const verified = jwt.verify(token, SECRET_KEY);
+        req.user = verified; // Attach user info to the request
+        next(); // Move to the next function
+    } catch (err) {
+        res.status(400).send("Invalid Token");
+    }
+};
+
+// A Protected API Route
+app.get('/api/data', verifyToken, (req, res) => {
+    res.json({ message: "This is secret data from the server!", user: req.user });
+});
+
 // 1. SIGNUP ROUTE
 app.post('/register', async (req, res) => {
     const { email, password } = req.body;

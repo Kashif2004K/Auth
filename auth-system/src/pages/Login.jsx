@@ -1,13 +1,30 @@
 import { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // 2. Initialize it
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-    // This is where we will eventually call our API
+    try {
+        const response = await axios.post('http://localhost:5000/login', {
+            email,
+            password
+        });
+        
+        const token = response.data.token;
+        console.log("Received Token:", token);
+        
+        // Step 2: Store it!
+        localStorage.setItem('token', token);
+        navigate('/dashboard');        
+    } catch (error) {
+        console.error("Login Failed", error.response.data);
+        alert("Invalid Credentials");
+    }
   };
 
   return (

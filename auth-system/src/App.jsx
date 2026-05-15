@@ -1,11 +1,28 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import Dashboard from "./pages/Dashboard"
 import Login from "./pages/Login"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const App = () => {
   return (
-    <div> 
-      <h1>Auth Project</h1>
-      <Login />
-   </div>
+    <Router>
+      <Routes>
+      <Route path="/login" element={<Login />} />
+                
+                  {/* This is the Locked Door */}
+                  <Route 
+                      path="/dashboard" 
+                      element={
+                          <ProtectedRoute>
+                              <Dashboard />
+                          </ProtectedRoute>
+                      } 
+                  />
+
+                  {/* Default route */}
+                  <Route path="*" element={<Login />} />
+        </Routes>
+    </Router>
   )
 }
 
