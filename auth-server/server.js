@@ -9,7 +9,7 @@ app.use(express.json()); // Allows the server to read JSON sent from React
 app.use(cors());         // Allows the connection between Frontend & Backend
 
 // A "Fake" Database for learning (we will use a real one later)
-const users = []; 
+const users = [];
 
 // THE SECRET KEY (In a real app, this goes in your .env file)
 const SECRET_KEY = "my_super_secret_key_123";

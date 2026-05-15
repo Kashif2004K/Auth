@@ -19,7 +19,7 @@ const Login = () => {
         console.log("Received Token:", token);
         
         // Step 2: Store it!
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', response.data.token);
         navigate('/dashboard');        
     } catch (error) {
         console.error("Login Failed", error.response.data);
