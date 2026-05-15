@@ -1,31 +1,26 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const { login } = useContext(AuthContext);
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // 2. Initialize it
 
-  const handleLogin = async (e) => {
+const handleLogin = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post('http://localhost:5000/login', {
-            email,
-            password
-        });
+        const response = await axios.post('http://localhost:5000/login', { email, password });
         
-        const token = response.data.token;
-        console.log("Received Token:", token);
+        // Use the context function! It saves to localStorage AND updates the UI
+        login(response.data.token); 
         
-        // Step 2: Store it!
-        localStorage.setItem('token', response.data.token);
-        navigate('/dashboard');        
+        navigate('/dashboard');
     } catch (error) {
-        console.error("Login Failed", error.response.data);
-        alert("Invalid Credentials");
+        alert("Invalid credentials");
     }
-  };
+};
 
   return (
     <div style={{ padding: '20px' }}>
